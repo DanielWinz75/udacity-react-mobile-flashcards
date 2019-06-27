@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { purple, white, gray, lightgray } from '../utils/colors'
 import { addNewDeck } from '../actions/decks'
 import { _exampleCards } from '../utils/helpers'
+import { setCurrentDeckName } from '../actions/currentDeck';
 
 class Decks extends Component {
 
@@ -16,6 +17,11 @@ class Decks extends Component {
         }
     }
 
+    openDeck = (deckname) => {
+        this.props.navigation.navigate('Deck', {deckname: deckname})
+        this.props.dispatch(setCurrentDeckName(deckname))
+    }
+
     render() {
         return(
             <View style={styles.container}>
@@ -23,13 +29,12 @@ class Decks extends Component {
                     <TouchableOpacity 
                         key={deckname} 
                         style={styles.row}
-                        onPress={() => this.props.navigation.navigate('Deck', {deckname: deckname})}>
+                        onPress={() => this.openDeck(deckname)}>
                         <View style={styles.box}>
                             <Text style={styles.boxcontent}>{deckname}</Text>
                         </View>
                     </TouchableOpacity>
                 ))}
-
             </View>            
         )
     }

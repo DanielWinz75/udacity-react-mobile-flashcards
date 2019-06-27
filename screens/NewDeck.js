@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
 import { connect } from 'react-redux'
-import { purple, white } from '../utils/colors'
+import { purple, white, gray } from '../utils/colors'
 import { _exampleCards } from '../utils/helpers'
 import { addNewDeck } from '../actions/decks'
 
@@ -9,6 +9,11 @@ class NewDeck extends Component {
 
     state = {
         deckname: ''
+    }
+
+    addDeck = () => {
+        this.props.dispatch(addNewDeck(this.state.deckname))
+        this.props.navigation.goBack()
     }
 
     render() {
@@ -24,7 +29,7 @@ class NewDeck extends Component {
                 <View style={styles.row}>
                     <TouchableOpacity
                         style={styles.AndroidBtn}
-                            onPress={() => (this.props.dispatch(addNewDeck(this.state.deckname)))} >
+                            onPress={this.addDeck} >
                         <Text style={styles.btnText}>Save Deck</Text>
                     </TouchableOpacity>
                 </View> 
@@ -51,7 +56,7 @@ const styles = StyleSheet.create({
     inputtext: {
         height: 30, 
         width: 250, 
-        borderColor: 'gray', 
+        borderColor: gray, 
         borderWidth: 1,
         fontSize: 18,
     },

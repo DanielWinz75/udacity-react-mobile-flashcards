@@ -4,13 +4,13 @@ import { createAppContainer, createStackNavigator, createMaterialTopTabNavigator
 import { createStore, applyMiddleware } from 'redux'
 import Decks from './screens/Decks'
 import Deck from './screens/Deck'
+import NewCard from './screens/NewCard'
 import decks from './reducers/decks'
 import thunk from 'redux-thunk'
 import combineReducers from './reducers'
 import logger from './middleware/logger'
 import NewDeck from './screens/NewDeck'
 import { purple, white } from './utils/colors'
-
 
 const Tabs = createMaterialTopTabNavigator({
     Decks: {
@@ -46,7 +46,6 @@ const Tabs = createMaterialTopTabNavigator({
   }  
 )
 
-
 let Navigation = createAppContainer(createStackNavigator({
     Decks: {
       screen: Tabs,
@@ -66,7 +65,16 @@ let Navigation = createAppContainer(createStackNavigator({
           backgroundColor: purple,
         },
       }      
-    }
+    },
+    NewCard: {
+      screen: NewCard,
+      navigationOptions: {
+        headerTintColor: white,
+        headerStyle: {
+          backgroundColor: purple,
+        },
+      }      
+    }    
 }))
 
 const store = createStore(
