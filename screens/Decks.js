@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { purple, white, gray, lightgray } from '../utils/colors'
-import { addNewDeck } from '../actions/decks'
+import { addNewDeck, addNewQuestion } from '../actions/decks'
 import { _exampleCards } from '../utils/helpers'
 import { setCurrentDeckName } from '../actions/currentDeck';
 
@@ -12,7 +12,9 @@ class Decks extends Component {
         if (process.env.NODE_ENV !== "production") {
             console.log('in dev mode')
             Object.keys(_exampleCards).map((deckname) => {
+                const {question, answer} = _exampleCards[deckname].questions[0]
                 this.props.dispatch(addNewDeck(deckname))
+                this.props.dispatch(addNewQuestion(deckname, question, answer))
             })
         }
     }

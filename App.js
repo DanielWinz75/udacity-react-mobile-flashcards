@@ -5,6 +5,7 @@ import { createStore, applyMiddleware } from 'redux'
 import Decks from './screens/Decks'
 import Deck from './screens/Deck'
 import NewCard from './screens/NewCard'
+import Quiz from './screens/Quiz'
 import decks from './reducers/decks'
 import thunk from 'redux-thunk'
 import combineReducers from './reducers'
@@ -74,7 +75,16 @@ let Navigation = createAppContainer(createStackNavigator({
           backgroundColor: purple,
         },
       }      
-    }    
+    },
+    Quiz: {
+      screen: Quiz,
+      navigationOptions: {
+        headerTintColor: white,
+        headerStyle: {
+          backgroundColor: purple,
+        },
+      }      
+    },
 }))
 
 const store = createStore(

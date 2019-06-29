@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import { purple, white, gray } from '../utils/colors'
+import { white, gray } from '../utils/colors'
 import { addNewQuestion } from '../actions/decks'
 
 class NewCard extends Component {
@@ -29,6 +29,7 @@ class NewCard extends Component {
                 <View style={styles.row}>
                     <TextInput
                         style={styles.inputtext}
+                        multiline
                         onChangeText={(text) => this.setState({question: text})}
                         placeholder='Question'
                         />
@@ -36,15 +37,16 @@ class NewCard extends Component {
                 <View style={styles.row}>
                     <TextInput
                         style={styles.inputtext}
+                        multiline
                         onChangeText={(text) => this.setState({answer: text})}
                         placeholder='Answer'
                         />
                 </View>     
                 <View style={styles.row}>
                     <TouchableOpacity
-                        style={styles.AndroidBtn}
+                        style={styles.whiteBtn}
                             onPress={this.saveQuestion} >
-                        <Text style={styles.btnText}>Save Question</Text>
+                        <Text style={styles.whiteBtnText}>Save Question</Text>
                     </TouchableOpacity>
                 </View> 
             </View>
@@ -74,14 +76,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',        
     },
     inputtext: {
-        height: 30, 
-        width: 250, 
+        height: 120, 
+        width: 320, 
         borderColor: gray,
         borderWidth: 1,
         fontSize: 18,
+        maxHeight: 150,
     },
-    AndroidBtn: {
-        backgroundColor: purple,
+    whiteBtn: {
+        width: 280,
+        textAlign: 'left',
+        borderStyle: 'solid',
+        borderWidth: 2,
+        backgroundColor: white,
         padding: 10,
         paddingLeft: 30,
         paddingRight: 30,
@@ -90,9 +97,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    btnText: {
-        color: white,
+    whiteBtnText: {
         fontSize: 22,
         textAlign: 'center',
-    },    
+    },   
   })

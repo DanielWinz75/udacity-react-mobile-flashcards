@@ -1,25 +1,30 @@
 import React, {Component} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import { purple, white, gray, lightgray, orange } from '../utils/colors'
-import Quiz from '../components/Quiz'
+import { white, gray, lightgray, black } from '../utils/colors'
+import { initializeQuiz } from '../actions/quiz'
 
 class Deck extends Component {
-
-    state = {
-        runQuiz: false
-    }
-
     static navigationOptions = ({ navigation }) => {
         const { deckname } = navigation.state.params
         return {
-          title: `Quiz: ${deckname}`
+          title: `Deck: ${deckname}`
+        }
+    }
+
+    // reducer function
+    getQuestionsObject(acc, element, index) {
+        return {
+            ...acc,
+            [index]: element
         }
     }
 
     startQuiz = () => {
-        // this.props.navigation.navigate('Quiz', {deckname: `Your are playing ${this.state.deckname}`})
-        this.setState({runQuiz: true})
+        const {navigation, deckname, dispatch, qlength, questions} = this.props
+        const questionsObj = questions.reduce(this.getQuestionsObject, 0)
+        dispatch(initializeQuiz(deckname, qlength, questionsObj))
+        navigation.navigate('Quiz', {deckname: deckname, questNo: 0})
     }
 
     newCard = () => {
@@ -27,42 +32,60 @@ class Deck extends Component {
     }
 
     render() {
-
         return (
             <View style={{flex: 1}}>
-            {
-                this.state.runQuiz === false ? (
-                    <View style={styles.container}>
+                {this.props.qlength === 0 ? (
+                    <View style={styles.container}>                    
+                        <View style={styles.row}>
+                            <View style={styles.row}>
+                                <Text style={styles.infobox}>There aren't any cards on this deck yet. Add a card with question and answer to start a quiz.</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.row}
+                                onPress={this.newCard} >
+                            <View style={styles.blackBtn}>
+                                <Text style={styles.blackBtnText}>New Card</Text>
+                            </View>
+                        </TouchableOpacity>      
+                    </View>                  
+                    ) : (
+                    <View style={styles.container}>                        
+                        <View style={styles.row}>
+                            <Text style={styles.infobox}>The deck contains {this.props.qlength === 1 ? <Text>1 card</Text> : <Text>{this.props.qlength} cards</Text>} </Text>
+                        </View>                        
                         <TouchableOpacity
                             style={styles.row}
                                 onPress={this.startQuiz} >
-                            <View style={styles.box}>
-                                <Text style={styles.boxcontent}>Start Quiz</Text>
+                            <View style={styles.whiteBtn}>
+                                <Text style={styles.whiteBtnText}>Start Quiz</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.row}
                                 onPress={this.newCard} >
-                            <View style={styles.box}>
-                                <Text style={styles.boxcontent}>New Card</Text>
+                            <View style={styles.blackBtn}>
+                                <Text style={styles.blackBtnText}>New Card</Text>
                             </View>
-                        </TouchableOpacity>
-                    </View> 
-                ) : (
-
-                    <Quiz />
-
-                )
-            }
-            </View>
+                        </TouchableOpacity>                          
+                    </View>
+                )}
+            </View> 
         )
     }
 }
 
 function mapStateToProps({currentDeck, decks}) {
+    let qlength = 0
+    let questions = []
+    if( decks[currentDeck.deckname].questions ) {
+        questions = decks[currentDeck.deckname].questions
+        qlength = questions.length
+    }
     return {
         deckname: currentDeck.deckname,
-        questions: decks[currentDeck.deckname].questions
+        qlength,
+        questions,
     }
 }
 
@@ -85,20 +108,32 @@ const styles = StyleSheet.create({
         width: 300,
         textAlign: 'left',
         borderStyle: 'solid',
-        borderWidth: 2,
+        borderWidth: 1,
         borderRadius: 2,
         borderColor: gray,  
         backgroundColor: lightgray,        
     },
-    orange: {
-        backgroundColor: orange,
-    },
+    infobox: {
+        width: 320,
+        textAlign: 'left',
+        borderStyle: 'solid',
+        borderWidth: 1,
+        borderRadius: 2,
+        borderColor: gray,  
+        backgroundColor: lightgray, 
+        margin: 10,
+        fontSize: 18,               
+    },    
     boxcontent: {
         margin: 10,
         fontSize: 18,
-    },
-    AndroidBtn: {
-        backgroundColor: purple,
+    }, 
+    whiteBtn: {
+        width: 280,
+        textAlign: 'left',
+        borderStyle: 'solid',
+        borderWidth: 2,
+        backgroundColor: white,
         padding: 10,
         paddingLeft: 30,
         paddingRight: 30,
@@ -107,9 +142,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    btnText: {
+    whiteBtnText: {
+        fontSize: 22,
+        textAlign: 'center',
+    },
+    blackBtn: {
+        width: 280,
+        textAlign: 'left',
+        borderStyle: 'solid',
+        borderWidth: 2,        
+        backgroundColor: black,
+        padding: 10,
+        paddingLeft: 30,
+        paddingRight: 30,
+        height: 45,
+        borderRadius: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    blackBtnText: {
         color: white,
         fontSize: 22,
         textAlign: 'center',
-    },    
+    },            
   })
