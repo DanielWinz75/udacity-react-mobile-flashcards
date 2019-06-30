@@ -15,6 +15,18 @@ class Quiz extends Component {
         dispResult: false,
     }
 
+    startAgain = () => {
+
+        console.log('i am here')
+        
+        this.setState({
+            questNo: 0,
+            cardSide: 'question',
+            yourAnswer: '',
+            dispResult: false,
+        })
+    }
+
     static navigationOptions = ({ navigation }) => {
         const { deckname } = navigation.state.params
         return {
@@ -54,13 +66,18 @@ class Quiz extends Component {
     }
 
     render() {
-        const { deck, qAmount } = this.props
+        const { deck, qAmount, amountCorrect } = this.props
         const { questNo } = this.state
 
         return (
             <View style={{flex: 1}}>
                 {this.state.dispResult ? (
-                    <Result />
+                    <Result 
+                        qAmount={qAmount} 
+                        amountCorrect={amountCorrect} 
+                        navigation={this.props.navigation}
+                        startAgain={this.startAgain}
+                        />
                 ) : (
                     <View style={{flex: 1}}>
                         {this.state.cardSide === 'question' ? (
@@ -88,13 +105,19 @@ class Quiz extends Component {
     }
 }
 
-function maptStateToProps({decks, currentDeck}) {
+function maptStateToProps({decks, currentDeck, quiz}) {
     const deck = decks[currentDeck.deckname]
     const qAmount = deck.questions.length
+    const quizAnswers = quiz.questions
+    const amountCorrect = quiz.amountCorrect
+    const amountIncorrect = quiz.amountIncorrect
     return {
         qAmount,
         deck,
         deckname: currentDeck.deckname,
+        quizAnswers,
+        amountCorrect,
+        amountIncorrect,
     }
 }
 

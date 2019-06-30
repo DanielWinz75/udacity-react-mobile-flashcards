@@ -1,4 +1,4 @@
-import { ADD_ANSWER, INITIALIZE_QUIZ, ADD_RESULT } from '../actions/quiz'
+import { ADD_ANSWER, INITIALIZE_QUIZ, UPDATE_RESULT } from '../actions/quiz'
 
 export default function quiz(state = {}, action) {
     switch(action.type) {
@@ -8,6 +8,8 @@ export default function quiz(state = {}, action) {
                 deckname: action.deckname,
                 qAmount: action.qAmount,
                 questions: action.questions,
+                amountCorrect: action.amountCorrect,
+                amountIncorrect: action.amountIncorrect,
             }
         case ADD_ANSWER:
             return {
@@ -20,16 +22,18 @@ export default function quiz(state = {}, action) {
                     }
                 }
             }
-        case ADD_RESULT: 
+        case UPDATE_RESULT: 
             return {
                 ...state,
                 questions: {
                     ...state['questions'],
                     [action.questNo]: {
                         ...state['questions'][action.questNo],
-                        result: action.result
+                        result: action.result,
                     }
-                }
+                },
+                amountCorrect: action.amountCorrect,
+                amountIncorrect: action.amountIncorrect,
             }        
         default:
             return state

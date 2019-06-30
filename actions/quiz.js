@@ -1,6 +1,6 @@
 export const INITIALIZE_QUIZ = 'INITIALIZE_QUIZ'
 export const ADD_ANSWER = 'ADD_ANSWER'
-export const ADD_RESULT = 'ADD_RESULT'
+export const UPDATE_RESULT = 'UPDATE_RESULT'
 
 export function initializeQuiz(deckname, qAmount, questions) {
     return {
@@ -8,6 +8,8 @@ export function initializeQuiz(deckname, qAmount, questions) {
         deckname,
         qAmount,
         questions,
+        amountCorrect: 0,
+        amountIncorrect: 0,
     }
 }
 
@@ -19,10 +21,27 @@ export function addAnswer(questNo, yourAnswer) {
     }
 }
 
-export function addResult(questNo, result) {
+export function updateResult(amountCorrect, amountIncorrect, result, questNo) {
     return {
-        type: ADD_RESULT,
-        questNo,
+        type: UPDATE_RESULT,
+        amountCorrect,
+        amountIncorrect,
         result,
+        questNo,
+    }
+}
+
+export function addResult(questNo, result) {
+    return (dispatch, getState) => {
+        const { quiz } = getState()
+        let amountCorrect = quiz.amountCorrect
+        let amountIncorrect = quiz.amountIncorrect
+
+        if( result === 'correct') {
+            amountCorrect = amountCorrect + 1
+        } else {
+            amountIncorrect = amountIncorrect + 1
+        }
+        dispatch(updateResult(amountCorrect, amountIncorrect, result, questNo))
     }
 }
