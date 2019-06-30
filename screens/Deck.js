@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { white, gray, lightgray, black } from '../utils/colors'
 import { initializeQuiz } from '../actions/quiz'
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
 class Deck extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -25,6 +26,7 @@ class Deck extends Component {
         const questionsObj = questions.reduce(this.getQuestionsObject, 0)
         dispatch(initializeQuiz(deckname, qlength, questionsObj))
         navigation.navigate('Quiz', {deckname: deckname, questNo: 0})
+        clearLocalNotification().then(setLocalNotification)
     }
 
     newCard = () => {

@@ -1,5 +1,8 @@
-import { Notifications, Permissions } from 'expo'
-import { View, StyleSheet, AsyncStorage } from 'react-native'
+import { Notifications } from 'expo'
+import * as Permissions from 'expo-permissions'
+import { AsyncStorage } from 'react-native'
+
+const NOTIFICATION_KEY = 'Flashcards:notifications1'
 
 export const _exampleCards = {
     React: {
@@ -33,16 +36,16 @@ export function clearLocalNotification () {
 
 function createNotification () {
     return {
-        title: 'Log your stats!',
-        body: "👋 don't forget to log your stats for today!",
+        title: 'Play a Quiz!',
+        body: "Don't forget to play a Quiz and improve your skills today.",
         ios: {
-        sound: true,
+            sound: true,
         },
-        android: {
-        sound: true,
-        priority: 'high',
-        sticky: false,
-        vibrate: true,
+            android: {
+            sound: true,
+            priority: 'high',
+            sticky: false,
+            vibrate: true,
         }
     }
 }
@@ -52,26 +55,25 @@ export function setLocalNotification () {
         .then(JSON.parse)
         .then((data) => {
             if (data === null) {
-            Permissions.askAsync(Permissions.NOTIFICATIONS)
+                Permissions.askAsync(Permissions.NOTIFICATIONS)
                 .then(({ status }) => {
-                if (status === 'granted') {
-                    Notifications.cancelAllScheduledNotificationsAsync()
-    
-                    let tomorrow = new Date()
-                    tomorrow.setDate(tomorrow.getDate() + 1)
-                    tomorrow.setHours(20)
-                    tomorrow.setMinutes(0)
-    
-                    Notifications.scheduleLocalNotificationAsync(
-                    createNotification(),
-                    {
-                        time: tomorrow,
-                        repeat: 'day',
+                    if (status === 'granted') {
+                        Notifications.cancelAllScheduledNotificationsAsync()
+                        let tomorrow = new Date()
+                        tomorrow.setDate(tomorrow.getDate() + 1)
+                        tomorrow.setHours(20)
+                        tomorrow.setMinutes(0)
+        
+                        Notifications.scheduleLocalNotificationAsync(
+                        createNotification(),
+                        {
+                            time: tomorrow,
+                            repeat: 'day',
+                        }
+                        )
+        
+                        AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true))
                     }
-                    )
-    
-                    AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true))
-                }
                 })
             }
         }

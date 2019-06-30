@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { purple, white, gray } from '../utils/colors'
 import { _exampleCards } from '../utils/helpers'
 import { addNewDeck } from '../actions/decks'
+import { setCurrentDeckName } from '../actions/currentDeck'
 
 class NewDeck extends Component {
 
@@ -12,8 +13,10 @@ class NewDeck extends Component {
     }
 
     addDeck = () => {
-        this.props.dispatch(addNewDeck(this.state.deckname))
-        this.props.navigation.goBack()
+        const deckname = this.state.deckname
+        this.props.dispatch(addNewDeck(deckname))
+        this.props.dispatch(setCurrentDeckName(deckname))        
+        this.props.navigation.navigate('Deck', {deckname: deckname})
     }
 
     render() {

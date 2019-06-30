@@ -12,6 +12,7 @@ import combineReducers from './reducers'
 import logger from './middleware/logger'
 import NewDeck from './screens/NewDeck'
 import { purple, white } from './utils/colors'
+import { setLocalNotification, clearLocalNotification } from './utils/helpers'
 
 const Tabs = createMaterialTopTabNavigator({
     Decks: {
@@ -96,6 +97,10 @@ const store = createStore(
 )
 
 export default class App extends React.Component {
+  componentDidMount() {
+    clearLocalNotification()
+    setLocalNotification()
+  }
   render() {
     return (
       <Provider store={store}>

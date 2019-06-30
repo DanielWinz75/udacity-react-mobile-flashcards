@@ -17,12 +17,12 @@ const Answer = ({questNo, qAmount, question, answer, yourAnswer, saveResult}) =>
             </View>
             <View style={styles.row} >
                 <View style={styles.infobox}>
-                    <Text style={styles.boxcontent}>{answer}</Text>
+                    <Text style={styles.boxcontent}>Original answer: "{answer}"</Text>
                 </View>
             </View>            
             <View style={styles.row} >
                 <View style={styles.infobox}>
-                    <Text style={styles.boxcontent}>{yourAnswer}</Text>
+                    <Text style={styles.boxcontent}>Your answer: "{yourAnswer}"</Text>
                 </View>
             </View> 
             <View style={styles.row}>

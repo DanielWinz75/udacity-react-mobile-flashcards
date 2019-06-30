@@ -18,6 +18,7 @@ const Question = ({questNo, qAmount, question, flipCard, saveAnswer}) => {
             <View style={styles.row} >
                 <TextInput
                     style={styles.inputtext}
+                    multiline                    
                     onChangeText={ (text) => {saveAnswer(text)} }
                     placeholder='Answer'
                     />
